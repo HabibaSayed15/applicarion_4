@@ -1,22 +1,20 @@
+import 'package:bmi/cubit.dart';
+import 'package:bmi/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-// ignore: camel_case_types
-class first extends StatefulWidget {
-  const first({super.key});
+class BmiView extends StatelessWidget {
+  const BmiView({super.key});
 
-  @override
-  State<first> createState() => _MyWidgetState();
-}
-
-class _MyWidgetState extends State<first> {
-  int counter = 63;
-  int counter2 = 160;
-  double result = 0;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: const Color.fromARGB(115, 15, 4, 70),
+    return BlocProvider(
+      create: (context) => CounterCubit(BmiCounter()),
+      child: BlocBuilder<CounterCubit, BmiCounter>(
+        builder: (context, state) {
+          return  SafeArea(
+            child: Scaffold(
+               backgroundColor: const Color.fromARGB(115, 15, 4, 70),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -56,7 +54,7 @@ class _MyWidgetState extends State<first> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "$counter",
+                           BlocProvider.of<CounterCubit>(context).counter.toString(),
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
@@ -78,9 +76,7 @@ class _MyWidgetState extends State<first> {
                         children: [
                           FloatingActionButton(
                             onPressed: () {
-                              setState(() {
-                                counter--;
-                              });
+                             BlocProvider.of<CounterCubit>(context).remove();
                             },
                             backgroundColor: Colors.white30,
                             mini: true,
@@ -89,9 +85,7 @@ class _MyWidgetState extends State<first> {
                           const SizedBox(width: 10),
                           FloatingActionButton(
                             onPressed: () {
-                              setState(() {
-                                counter++;
-                              });
+                              BlocProvider.of<CounterCubit>(context).add();
                             },
                             backgroundColor: Colors.white30,
                             mini: true,
@@ -129,7 +123,7 @@ class _MyWidgetState extends State<first> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "$counter2",
+                               BlocProvider.of<CounterCubit>(context).counter2.toString(),
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 30,
@@ -151,9 +145,7 @@ class _MyWidgetState extends State<first> {
                           children: [
                             FloatingActionButton(
                               onPressed: () {
-                                setState(() {
-                                  counter2--;
-                                });
+                                BlocProvider.of<CounterCubit>(context).remove1();
                               },
                               backgroundColor: Colors.white30,
                               mini: true,
@@ -162,9 +154,7 @@ class _MyWidgetState extends State<first> {
                             const SizedBox(width: 10),
                             FloatingActionButton(
                               onPressed: () {
-                                setState(() {
-                                  counter2++;
-                                });
+                                BlocProvider.of<CounterCubit>(context).add1();
                               },
                               backgroundColor: Colors.white30,
                               mini: true,
@@ -188,11 +178,7 @@ class _MyWidgetState extends State<first> {
               fixedSize: const Size(370, 60),
             ),
             onPressed: () {
-              setState(() {
-                result =((counter / (counter2 * counter2)) * 10000);
-              //  result=result.toStringAsFixed(2) as double;
-                
-              });
+             BlocProvider.of<CounterCubit>(context).resultcal();
             },
             child: const Text(
               "Calculate",
@@ -203,41 +189,45 @@ class _MyWidgetState extends State<first> {
             height: 120,
           ),
           Text(
-            "Result : ${result.toStringAsFixed(2)}",
+            BlocProvider.of<CounterCubit>(context).resultcal().toStringAsFixed(2),
             style: const TextStyle(
                 color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
           ),
           const SizedBox(
             height: 25,
           ),
-          if (result <= 16)
+          if (BlocProvider.of<CounterCubit>(context).resultcal() <= 16)
             const Text(
               "Severe Thinness",
               style: TextStyle(color: Colors.green, fontSize: 30),
             ),
-          if (result > 16 && result <= 17)
+          if (BlocProvider.of<CounterCubit>(context).resultcal() > 16 && BlocProvider.of<CounterCubit>(context).resultcal() <= 17)
             const Text("Moderate Thinness",
                 style: TextStyle(color: Colors.green, fontSize: 30)),
-          if (result > 17 && result <= 18.5)
+          if (BlocProvider.of<CounterCubit>(context).resultcal() > 17 && BlocProvider.of<CounterCubit>(context).resultcal() <= 18.5)
             const Text("Mild Thinness",
                 style: TextStyle(color: Colors.green, fontSize: 30)),
-          if (result > 18.5 && result <= 25)
+          if (BlocProvider.of<CounterCubit>(context).resultcal() > 18.5 && BlocProvider.of<CounterCubit>(context).resultcal() <= 25)
             const Text("Normal",
                 style: TextStyle(color: Colors.green, fontSize: 30)),
-          if (result > 25 && result <= 30)
+          if (BlocProvider.of<CounterCubit>(context).resultcal() > 25 && BlocProvider.of<CounterCubit>(context).resultcal() <= 30)
             const Text("Overweight",
                 style: TextStyle(color: Colors.green, fontSize: 30)),
-          if (result > 30 && result <= 35)
+          if (BlocProvider.of<CounterCubit>(context).resultcal() > 30 && BlocProvider.of<CounterCubit>(context).resultcal() <= 35)
             const Text("Obese Class I",
                 style: TextStyle(color: Colors.green, fontSize: 30)),
-          if (result > 35 && result <= 40)
+          if (BlocProvider.of<CounterCubit>(context).resultcal() > 35 && BlocProvider.of<CounterCubit>(context).resultcal() <= 40)
             const Text("Obese Class II",
                 style: TextStyle(color: Colors.green, fontSize: 30)),
-          if (result > 40)
+          if (BlocProvider.of<CounterCubit>(context).resultcal() > 40)
             const Text("Obese Class III",
                 style: TextStyle(color: Colors.green, fontSize: 30)),
         ],
       )),
-    ));
+            ),
+          );
+        },
+      ),
+    );
   }
 }
